@@ -1,37 +1,40 @@
 const express = require("express");
 
-const users = require("./users.json");
+const book = require("./book.json");
 
 const app = express();
 
 app.use(express.json())
 
 
+const logger = (req, res, next) => {
+    req.name = 'Moneer Ashraf'
+    next();
+}
 
-
-
+app.use(logger);
 
 app.get("/", (req, res) => {
-    res.send(users);
+    res.send({"api_requested_by":req.name,book});
 })
 
 app.post("/books/", (req, res) => {
-    const newUsers = [...users, req.body]
-    res.send(newUsers)
+    const newbook = [...book, req.body]
+    res.send(newbook)
 })
 
 app.get("/books/:id", (req, res) => {
-    const user = users.filter((user) => user.id === Number(req.params.id))
+    const books = book.filter((books) => books.id === Number(req.params.id))
 
-    res.send(user);
+    res.send({"api_requested_by":req.name,books});
+
 })
 
 
 app.patch("/books/:id", (req, res) => {
-    const newUsers = users.map((user) => {
+    const newbook = book.map((user) => {
         if (req.params.id == user.id) {
 
-            // optional chaining , null safety
             if (req?.body?.Book_name) {
                 user.Book_name = req.body.Book_name
             };
@@ -50,16 +53,14 @@ app.patch("/books/:id", (req, res) => {
         }
         return user
     })
-    res.send(newUsers)
+    res.send(newbook)
 })
 
 
 app.delete("/books/:id", (req, res) => {
-    const newUsers = users.filter((user) => user.id !== Number(req.params.id))
-    res.send(newUsers)
+    const newbook = book.filter((user) => user.id !== Number(req.params.id))
+    res.send(newbook)
 })
-
-
 
 
 app.listen(2345, function () {
