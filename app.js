@@ -24,9 +24,11 @@ app.post("/books/", (req, res) => {
 })
 
 app.get("/books/:id", (req, res) => {
-    const books = book.filter((books) => books.id === Number(req.params.id))
+    const newbooks = book.find((books) => books.id === Number(req.params.id))
+    // res.send(newbooks[0])
+    // console.log(newbooks.join(""))
 
-    res.send({"api_requested_by":req.name,books});
+    res.send({"api_requested_by":req.name,"book":newbooks});
 
 })
 
